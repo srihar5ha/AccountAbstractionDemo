@@ -150,9 +150,10 @@ const AccountAbstractionProvider = ({ children }: { children: JSX.Element }) => 
       })
 
       const web3AuthModalPack = new Web3AuthModalPack({
-        txServiceUrl: chain.transactionServiceUrl
+        // txServiceUrl: chain.transactionServiceUrl
       })
-
+      console.log("chain txservice url : ", chain.transactionServiceUrl)
+      
       await web3AuthModalPack.init({
         options,
         adapters: [openloginAdapter],
@@ -160,8 +161,9 @@ const AccountAbstractionProvider = ({ children }: { children: JSX.Element }) => 
       })
 
       setWeb3AuthModalPack(web3AuthModalPack)
+     
     })()
-  }, [chain])
+  }, [chain]) //everytime u switch chain, web3AuthModalPack is initialised.
 
   // auth-kit implementation
   const loginWeb3Auth = useCallback(async () => {
@@ -170,12 +172,17 @@ const AccountAbstractionProvider = ({ children }: { children: JSX.Element }) => 
     try {
       const { safes, eoa } = await web3AuthModalPack.signIn()
       const provider = web3AuthModalPack.getProvider() as ethers.providers.ExternalProvider
+      const addr= await web3AuthModalPack.getAddress();
+      const userinfo= await web3AuthModalPack.getUserInfo();
+      console.log("addr, userInfo,eoa,safes ",addr,userinfo,eoa,safes);
+      console.log("provider value is ", provider);
 
       // we set react state with the provided values: owner (eoa address), chain, safes owned & web3 provider
       setChainId(chain.id)
       setOwnerAddress(eoa)
       setSafes(safes || [])
       setWeb3Provider(new ethers.providers.Web3Provider(provider))
+      console.log("web3 provider value is ", web3Provider);
     } catch (error) {
       console.log('error: ', error)
     }
@@ -185,6 +192,7 @@ const AccountAbstractionProvider = ({ children }: { children: JSX.Element }) => 
     if (web3AuthModalPack && web3AuthModalPack.getProvider()) {
       ;(async () => {
         await loginWeb3Auth()
+        console.log("inside : web3AuthModalPack && web3AuthModalPack.getProvider()")
       })()
     }
   }, [web3AuthModalPack, loginWeb3Auth])

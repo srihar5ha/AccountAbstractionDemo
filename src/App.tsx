@@ -62,45 +62,12 @@ function App() {
           maxWidth="1200px"
           margin="120px auto 42px auto"
         >
-          {showSafeCoreVideo ? (
-            <SafeCoreInfo />
-          ) : (
-            <NavMenu setStep={setStep} activeStep={activeStep} />
-          )}
+         
 
           <main style={{ flexGrow: 1 }}>
             {/* Active Step Component */}
             <ActiveStepComponent setStep={setStep} />
-
-            {/* next & back Buttons */}
-            {!isFirstStep && (
-              <Stack direction="row" alignItems="center" spacing={2} marginTop="32px">
-                <Button onClick={previousStep} variant="outlined">
-                  Back
-                </Button>
-
-                {!isLastStep && (
-                  <>
-                    {nextLabel && (
-                      <Typography
-                        variant="h3"
-                        component="h2"
-                        fontWeight="700"
-                        flexGrow="1"
-                        textAlign="right"
-                        fontSize="20px"
-                      >
-                        {nextLabel}
-                      </Typography>
-                    )}
-
-                    <Button onClick={nextStep} variant="contained">
-                      Next
-                    </Button>
-                  </>
-                )}
-              </Stack>
-            )}
+            
           </main>
         </Box>
       </>
